@@ -1,0 +1,210 @@
+# NYC School Analyzer - Git Ignore File
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+
+# Virtual environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Data files (add specific patterns as needed)
+data/*.csv
+data/*.xlsx
+data/*.xls
+data/*.json
+data/raw/
+data/processed/
+data/backup/
+
+# Output files
+outputs/
+results/
+reports/
+charts/
+exports/
+
+# Log files
+logs/
+*.log
+log_*.txt
+
+# Configuration files with sensitive data
+config/production.yaml
+config/secrets.yaml
+.env.local
+.env.production
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+notebooks/.ipynb_checkpoints/
+
+# Documentation builds
+docs/_build/
+docs/build/
+site/
+
+# MyPy cache
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# pytype static type analyzer
+.pytype/
+
+# Cython debug symbols
+cython_debug/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Performance profiling
+*.prof
+*.lprof
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# Backup files
+*.bak
+*.backup
+*~
+
+# Archive files
+*.zip
+*.tar.gz
+*.tar.bz2
+*.rar
+
+# Docker
+.dockerignore
+
+# Conda
+.conda/
+
+# Spyder
+.spyderproject
+.spyproject
+
+# Rope
+.ropeproject
+
+# mkdocs documentation
+/site
+
+# Static type checking
+.mypy_cache/
+
+# Application specific
+/uploads/
+/downloads/
+sample_data/
+test_data/
+*.pickle
+*.pkl
+
+# Matplotlib
+*.png
+*.pdf
+*.svg
+*.eps
+!docs/images/*.png
+!docs/images/*.svg
+
+# Large files (use Git LFS if needed)
+*.h5
+*.hdf5
+*.parquet
+
+# Cache directories
+.cache/
+__cache__/
+
+# Local configuration overrides
+local_config.yaml
+dev_config.yaml
+
+# Secrets and credentials
+secrets/
+credentials/
+*.key
+*.pem
+*.crt
+
+# Runtime files
+*.pid
+*.sock
+
+# Memory dumps
+*.dump
+core.*

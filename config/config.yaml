@@ -1,0 +1,56 @@
+# NYC School Analyzer Configuration
+
+# Data Configuration
+data:
+  input_file: "high-school-directory.csv"
+  input_path: "data/"
+  output_path: "outputs/"
+  backup_path: "data/backup/"
+  
+# Analysis Parameters
+analysis:
+  target_borough: "BROOKLYN"
+  grade_of_interest: 9
+  include_expanded_grades: true
+  validation_enabled: true
+  
+# Visualization Settings
+visualization:
+  style: "seaborn"
+  figure_size: [12, 8]
+  dpi: 300
+  color_palette: "husl"
+  font_size: 11
+  export_formats: ["png", "pdf", "svg"]
+  
+# Output Configuration
+output:
+  export_csv: true
+  export_json: true
+  export_excel: true
+  include_timestamps: true
+  create_summary_report: true
+  
+# Logging Configuration
+logging:
+  level: "INFO"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+  file_enabled: true
+  file_path: "logs/"
+  max_file_size_mb: 10
+  backup_count: 5
+  
+# Performance Settings
+performance:
+  chunk_size: 10000
+  memory_limit_mb: 1024
+  parallel_processing: true
+  max_workers: 4
+  
+# Quality Checks
+quality:
+  min_data_completeness: 0.7
+  max_missing_percentage: 30.0
+  validate_data_types: true
+  check_outliers: true
+  outlier_threshold: 3.0

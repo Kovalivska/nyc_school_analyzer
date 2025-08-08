@@ -1,0 +1,129 @@
+version: '3.8'
+
+services:
+  # Main NYC School Analyzer service
+  nyc-school-analyzer:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        BUILD_DATE: ${BUILD_DATE:-}
+        VCS_REF: ${VCS_REF:-}
+        VERSION: ${VERSION:-1.0.0}
+    container_name: nyc-school-analyzer
+    image: nyc-school-analyzer:latest
+    
+    # Environment configuration
+    environment:
+      - NYC_SCHOOLS_LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - NYC_SCHOOLS_TARGET_BOROUGH=${TARGET_BOROUGH:-BROOKLYN}
+      - NYC_SCHOOLS_GRADE=${GRADE_OF_INTEREST:-9}
+      - NYC_SCHOOLS_OUTPUT_PATH=/app/outputs
+      - MPLBACKEND=Agg
+      - PYTHONUNBUFFERED=1
+    
+    # Volume mounts
+    volumes:
+      - ./data:/app/data:ro                    # Input data (read-only)
+      - ./outputs:/app/outputs:rw              # Output files (read-write)
+      - ./logs:/app/logs:rw                    # Log files (read-write)
+      - ./config:/app/config:ro               # Configuration files (read-only)
+    
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+          cpus: '2.0'
+        reservations:
+          memory: 512M
+          cpus: '0.5'
+    
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import nyc_school_analyzer; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    
+    # Restart policy
+    restart: unless-stopped
+    
+    # Command (can be overridden)
+    command: ["--help"]
+  
+  # Development service with additional tools
+  nyc-school-analyzer-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: builder
+    container_name: nyc-school-analyzer-dev
+    image: nyc-school-analyzer:dev
+    
+    environment:
+      - NYC_SCHOOLS_LOG_LEVEL=DEBUG
+      - NYC_SCHOOLS_TARGET_BOROUGH=${TARGET_BOROUGH:-BROOKLYN}
+      - NYC_SCHOOLS_GRADE=${GRADE_OF_INTEREST:-9}
+      - PYTHONPATH=/app/src
+    
+    volumes:
+      - ./:/app:rw                             # Mount entire project for development
+      - /app/.pytest_cache                     # Ignore pytest cache
+      - /app/__pycache__                       # Ignore Python cache
+    
+    working_dir: /app
+    command: ["/bin/bash"]
+    stdin_open: true
+    tty: true
+    
+    profiles:
+      - dev
+
+  # Jupyter notebook service for interactive analysis
+  jupyter:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile.jupyter
+    container_name: nyc-school-analyzer-jupyter
+    image: nyc-school-analyzer:jupyter
+    
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=${JUPYTER_TOKEN:-nyc-schools-token}
+    
+    volumes:
+      - ./notebooks:/app/notebooks:rw
+      - ./data:/app/data:ro
+      - ./outputs:/app/outputs:rw
+      - ./src:/app/src:ro
+    
+    ports:
+      - "${JUPYTER_PORT:-8888}:8888"
+    
+    command: >
+      bash -c "
+        pip install jupyterlab ipywidgets &&
+        jupyter lab --ip=0.0.0.0 --port=8888 --no-browser 
+        --allow-root --notebook-dir=/app/notebooks
+        --LabApp.token='${JUPYTER_TOKEN:-nyc-schools-token}'
+      "
+    
+    profiles:
+      - jupyter
+
+# Named volumes for persistent data
+volumes:
+  nyc_school_data:
+    driver: local
+  nyc_school_outputs:
+    driver: local
+  nyc_school_logs:
+    driver: local
+
+# Network configuration
+networks:
+  default:
+    name: nyc-school-analyzer
+    driver: bridge
