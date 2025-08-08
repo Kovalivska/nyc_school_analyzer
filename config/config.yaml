@@ -30,6 +30,8 @@ output:
   export_excel: true
   include_timestamps: true
   create_summary_report: true
+  include_timestamps: true
+  create_summary_report: true
   
 # Logging Configuration
 logging:

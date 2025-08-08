@@ -374,7 +374,7 @@ class Config:
         Returns:
             Dictionary of output paths
         """
-        base_output = Path(self.output.output_path)
+        base_output = Path(self.data.output_path)
         
         return {
             'base': base_output,

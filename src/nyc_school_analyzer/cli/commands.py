@@ -587,8 +587,21 @@ def _create_basic_visualizations(
 
 def _make_json_serializable(obj):
     """Convert objects to JSON-serializable format."""
+    import numpy as np
+    import pandas as pd
+    
     if hasattr(obj, 'isoformat'):  # datetime objects
         return obj.isoformat()
+    elif isinstance(obj, (np.integer, np.int64, np.int32)):
+        return int(obj)
+    elif isinstance(obj, (np.floating, np.float64, np.float32)):
+        return float(obj)
+    elif isinstance(obj, np.bool_):
+        return bool(obj)
+    elif isinstance(obj, np.ndarray):
+        return obj.tolist()
+    elif isinstance(obj, pd.Series):
+        return obj.tolist()
     elif hasattr(obj, 'to_dict'):  # custom objects with to_dict method
         return obj.to_dict()
     elif isinstance(obj, dict):
