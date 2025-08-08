@@ -325,26 +325,37 @@ class SchoolAnalyzer:
             logger.info("Generating comprehensive analysis report...")
             
             df = school_data.processed_data
+            df_full = df.copy()  # Keep full dataset for borough distribution
             
-            # Filter by borough if specified
+            # Filter by borough if specified (for most analyses except borough distribution)
             if target_borough:
                 df = self.processor.filter_by_borough(df, target_borough)
             
             # Perform all analyses
             analyses = {}
             
-            # Borough distribution
-            analyses['borough_distribution'] = self.analyze_borough_distribution(df)
+            # Borough distribution (always use full dataset)
+            analyses['borough_distribution'] = self.analyze_borough_distribution(df_full)
             
-            # Grade availability
+            # Grade availability (use filtered data)
             analyses['grade_availability'] = self.analyze_grade_availability(
                 df, self.config.grade_of_interest
             )
             
-            # Student populations
-            analyses['student_populations'] = self.analyze_student_populations(df)
+            # Student populations (use filtered data)
+            # Choose appropriate grouping column based on filtered data
+            if df['city'].nunique() > 5:
+                group_by = 'city'
+            elif 'community_board' in df.columns and df['community_board'].nunique() > 3:
+                group_by = 'community_board'
+            elif 'zip_codes' in df.columns and df['zip_codes'].nunique() > 3:
+                group_by = 'zip_codes'
+            else:
+                group_by = 'school_type'  # Fallback to school type
             
-            # Data quality
+            analyses['student_populations'] = self.analyze_student_populations(df, group_by)
+            
+            # Data quality (use filtered data)
             analyses['data_quality'] = self.analyze_data_quality(df)
             
             # Generate executive summary

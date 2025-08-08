@@ -80,10 +80,8 @@ data/processed/
 data/backup/
 
 # Output files
-outputs/
 results/
 reports/
-charts/
 exports/
 
 # Log files

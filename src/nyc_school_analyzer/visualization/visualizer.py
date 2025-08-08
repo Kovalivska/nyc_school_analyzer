@@ -124,6 +124,14 @@ class SchoolVisualizer:
             fig, axes = plt.subplots(2, 2, figsize=(16, 12))
             fig.suptitle(title, fontsize=16, fontweight='bold', y=0.95)
             
+            # Ensure compatibility: rename 'mean' to 'avg_students' and 'sum' to 'total_students'
+            if 'mean' in student_stats.columns and 'avg_students' not in student_stats.columns:
+                student_stats['avg_students'] = student_stats['mean']
+            if 'sum' in student_stats.columns and 'total_students' not in student_stats.columns:
+                student_stats['total_students'] = student_stats['sum']
+            if 'count' in student_stats.columns and 'school_count' not in student_stats.columns:
+                student_stats['school_count'] = student_stats['count']
+            
             # Chart 1: Average students per school
             if 'avg_students' in student_stats.columns:
                 avg_students = student_stats['avg_students'].sort_values(ascending=False)
@@ -407,6 +415,14 @@ class SchoolVisualizer:
                 if pop_stats:
                     # Convert to DataFrame for easier handling
                     stats_df = pd.DataFrame(pop_stats)
+                    
+                    # Ensure compatibility: rename columns for display
+                    if 'mean' in stats_df.columns and 'avg_students' not in stats_df.columns:
+                        stats_df['avg_students'] = stats_df['mean']
+                    if 'sum' in stats_df.columns and 'total_students' not in stats_df.columns:
+                        stats_df['total_students'] = stats_df['sum']
+                    if 'count' in stats_df.columns and 'school_count' not in stats_df.columns:
+                        stats_df['school_count'] = stats_df['count']
                     
                     # Average students chart
                     if 'avg_students' in stats_df.columns:

@@ -602,16 +602,32 @@ def _make_json_serializable(obj):
         return obj.tolist()
     elif isinstance(obj, pd.Series):
         return obj.tolist()
+    elif isinstance(obj, (pd.Index, pd.CategoricalIndex)):
+        return obj.tolist()
+    elif hasattr(obj, 'dtype') and 'object' in str(obj.dtype):
+        # Handle pandas object types
+        try:
+            return obj.tolist() if hasattr(obj, 'tolist') else str(obj)
+        except:
+            return str(obj)
+    elif pd.isna(obj):
+        return None
     elif hasattr(obj, 'to_dict'):  # custom objects with to_dict method
         return obj.to_dict()
     elif isinstance(obj, dict):
-        return {k: _make_json_serializable(v) for k, v in obj.items()}
+        return {str(k): _make_json_serializable(v) for k, v in obj.items()}
     elif isinstance(obj, list):
         return [_make_json_serializable(item) for item in obj]
     elif hasattr(obj, '__dict__'):  # custom objects
         return {k: _make_json_serializable(v) for k, v in obj.__dict__.items()}
     else:
-        return obj
+        try:
+            # Try to convert to basic types
+            if hasattr(obj, 'item'):  # numpy scalars
+                return obj.item()
+            return obj
+        except:
+            return str(obj)
 
 
 def _format_executive_summary(summary: Dict[str, Any]) -> str:

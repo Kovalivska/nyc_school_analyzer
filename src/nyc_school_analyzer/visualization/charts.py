@@ -511,6 +511,12 @@ class ChartGenerator:
     def _add_bar_labels(self, ax: plt.Axes, bars, values):
         """Add value labels on top of bars."""
         try:
+            # Convert values to list if it's a pandas Series or numpy array
+            if hasattr(values, 'tolist'):
+                values = values.tolist()
+            elif hasattr(values, 'values'):
+                values = values.values.tolist()
+            
             max_value = max(values) if values else 0
             for bar, value in zip(bars, values):
                 if pd.notna(value):

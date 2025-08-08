@@ -1,0 +1,147 @@
+{
+  "executive_summary": {
+    "key_findings": [
+      {
+        "category": "Geographic Distribution",
+        "finding": "Schools distributed across 1 locations",
+        "detail": "Largest concentration: Brooklyn"
+      },
+      {
+        "category": "Grade Access",
+        "finding": "100.0% grade availability",
+        "detail": "Target grade served by 121 schools"
+      }
+    ],
+    "critical_metrics": {
+      "total_students": 83197.0,
+      "total_schools": 119,
+      "average_school_size": 699.1344537815127
+    },
+    "strategic_priorities": [
+      "Improve data quality and collection processes",
+      "Address geographic concentration of resources"
+    ],
+    "data_quality_assessment": "Data quality concerns require attention before strategic decisions"
+  },
+  "detailed_analyses": {
+    "borough_distribution": {
+      "school_counts": {
+        "Brooklyn": 121
+      },
+      "student_statistics": {
+        "school_count": {
+          "Brooklyn": 119
+        },
+        "avg_students": {
+          "Brooklyn": 699.1
+        },
+        "median_students": {
+          "Brooklyn": 421.0
+        },
+        "std_students": {
+          "Brooklyn": 888.6
+        },
+        "min_students": {
+          "Brooklyn": 85.0
+        },
+        "max_students": {
+          "Brooklyn": 5458.0
+        },
+        "total_students": {
+          "Brooklyn": 83197.0
+        }
+      },
+      "concentration_metrics": {
+        "top_3_concentration": 100.0,
+        "top_5_concentration": 100.0,
+        "herfindahl_index": 10000.0
+      },
+      "total_boroughs": 1,
+      "largest_borough": "Brooklyn",
+      "smallest_borough": "Brooklyn",
+      "analysis_metadata": {
+        "total_schools_analyzed": 121,
+        "analysis_timestamp": "2025-08-08T16:28:13.611662",
+        "city_column_used": "city"
+      }
+    },
+    "grade_availability": {
+      "analysis_type": "Grade Availability",
+      "target_borough": "BROOKLYN",
+      "grade_analyzed": 9,
+      "total_schools": 121,
+      "schools_meeting_criteria": 121,
+      "percentage": 100.0,
+      "statistics": {
+        "min_grade_distribution": {
+          "9": 98,
+          "6": 23
+        },
+        "max_grade_distribution": {
+          "12": 117,
+          "10": 2,
+          "9": 1,
+          "11": 1
+        },
+        "average_grade_span": 3.5041322314049586
+      },
+      "insights": [
+        "Excellent Access: ALL schools accommodate Grade 9 students, indicating comprehensive coverage with no access gaps.",
+        "Policy Implication: No Grade 9 placement issues expected in this geographic area.",
+        "Specialized Schools: Average grade span of 3.5 suggests many schools focus on specific grade levels."
+      ]
+    },
+    "student_populations": {
+      "population_statistics": {
+        "count": {
+          "Brooklyn": 119
+        },
+        "mean": {
+          "Brooklyn": 699.1
+        },
+        "median": {
+          "Brooklyn": 421.0
+        },
+        "std": {
+          "Brooklyn": 888.6
+        },
+        "min": {
+          "Brooklyn": 85.0
+        },
+        "max": {
+          "Brooklyn": 5458.0
+        },
+        "sum": {
+          "Brooklyn": 83197.0
+        }
+      },
+      "patterns_and_outliers": {
+        "high_capacity_areas": {},
+        "low_capacity_areas": {},
+        "outlier_schools": 17,
+        "outlier_percentage": 14.285714285714285
+      },
+      "system_metrics": {
+        "system_total_students": 83197.0,
+        "system_total_schools": 119,
+        "system_average_school_size": 699.1344537815127,
+        "system_geographic_diversity": 1,
+        "system_grade_range_min": 6.0,
+        "system_grade_range_max": 12,
+        "system_total_grade_span": 6.0
+      },
+      "analysis_metadata": {
+        "schools_analyzed": 119,
+        "schools_excluded": 2,
+        "group_by_column": "city",
+        "analysis_timestamp": "2025-08-08T16:28:13.616536"
+      }
+    },
+    "data_quality": {
+      "basic_metrics": {
+        "total_records": 121,
+        "total_columns": 71,
+        "memory_usage_mb": 0.6494684219360352
+      },
+      "missing_data_analysis": {
+        "total_missing_values": 
