@@ -26,6 +26,7 @@ python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 
 # Install the package
+pip install -r requirements-minimal.txt
 pip install -e .
 ```
 
@@ -237,6 +238,8 @@ make sample-analysis
 
 ### Common Issues
 
+### Common Issues
+
 **1. Import Error: Module not found**
 ```bash
 # Ensure package is installed
@@ -252,7 +255,20 @@ echo $PYTHONPATH
 pip install --user -e .
 ```
 
-**3. Memory Error with Large Datasets**
+**3. Python Version Compatibility Issues**
+```bash
+# For Python 3.12+ use minimal requirements first
+pip install -r requirements-minimal.txt
+pip install -e .
+
+# Alternative: use conda environment with specific Python version
+conda create -n nyc-schools python=3.11
+conda activate nyc-schools
+pip install -r requirements-minimal.txt
+pip install -e .
+```
+
+**4. Memory Error with Large Datasets**
 ```bash
 # Use chunked processing
 export NYC_SCHOOLS_CHUNK_SIZE=5000
