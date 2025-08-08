@@ -9,8 +9,10 @@
 - **Storage**: 1GB free space for installation and outputs
 
 ### Required Data
-- NYC High School Directory CSV file (`high-school-directory.csv`)
-- Place the data file in the `data/` directory or specify custom path
+- NYC High School Directory CSV file (`2_3_high-school-directory.csv`)
+- NYC SAT Results CSV file (`4_sat-results.csv`) - optional
+- NYC School Safety Report CSV file (`1_school-safety-report.csv`) - optional
+- Place the data files in the `data/` directory or specify custom path
 
 ## Installation Options
 
@@ -18,7 +20,7 @@
 
 ```bash
 # Clone the repository
-git clone https://github.com/nyc-schools/nyc-school-analyzer.git
+git clone https://github.com/Kovalivska/nyc_school_analyzer.git
 cd nyc-school-analyzer
 
 # Create virtual environment
@@ -34,7 +36,7 @@ pip install -e .
 
 ```bash
 # Clone and install with development dependencies
-git clone https://github.com/nyc-schools/nyc-school-analyzer.git
+git clone https://github.com/Kovalivska/nyc_school_analyzer.git
 cd nyc-school-analyzer
 
 # Use Makefile for complete setup
@@ -45,7 +47,7 @@ make setup-dev
 
 ```bash
 # Clone repository
-git clone https://github.com/nyc-schools/nyc-school-analyzer.git
+git clone https://github.com/Kovalivska/nyc_school_analyzer.git
 cd nyc-school-analyzer
 
 # Build Docker image
@@ -62,14 +64,14 @@ docker-compose build
 ```bash
 # Create data directory and copy your CSV file
 mkdir -p data
-cp /path/to/your/high-school-directory.csv data/
+cp /path/to/your/2_3_high-school-directory.csv data/
 ```
 
 ### 2. Run Basic Analysis
 
 ```bash
 # Complete analysis for Brooklyn schools, Grade 9
-nyc-schools analyze data/high-school-directory.csv --borough BROOKLYN --grade 9
+nyc-schools analyze data/2_3_high-school-directory.csv --borough BROOKLYN --grade 9
 
 # Output will be saved to outputs/ directory
 ```
@@ -89,37 +91,36 @@ ls -la outputs/reports/
 
 ```bash
 # Complete analysis with custom output directory
-nyc-schools analyze data/schools.csv \
+nyc-schools analyze data/2_3_high-school-directory.csv \
   --output-dir results/brooklyn_analysis \
   --borough BROOKLYN \
-  --grade 9 \
-  --format csv json excel
+  --grade 9
 
-# Generate only visualizations
-nyc-schools visualize processed_data.csv \
+# Generate visualizations from processed data
+nyc-schools viz outputs/data/processed_data_*.csv \
   --output-dir charts/ \
-  --format png pdf svg \
-  --dpi 300
+  --format png pdf svg
 
 # Validate data quality
-nyc-schools validate data/schools.csv \
-  --output-file validation_report.html \
-  --strict
+nyc-schools validate data/2_3_high-school-directory.csv \
+  --output-file validation_report.html
 
 # Export processed data
-nyc-schools export processed_data.csv \
+nyc-schools export outputs/data/processed_data_*.csv \
   --output-dir exports/ \
-  --formats csv json parquet \
-  --compress
+  --formats csv json
 ```
 
 ### Python API
 
 ```python
-from nyc_school_analyzer import Config, DataProcessor, SchoolAnalyzer, SchoolVisualizer
+from nyc_school_analyzer.utils.config import Config
+from nyc_school_analyzer.data.processor import DataProcessor
+from nyc_school_analyzer.analysis.analyzer import SchoolAnalyzer
+from nyc_school_analyzer.visualization.visualizer import SchoolVisualizer
 
 # Load configuration
-config = Config('config/config.yaml')
+config = Config.load_config('config/config.yaml')
 
 # Initialize components
 processor = DataProcessor()
@@ -127,7 +128,7 @@ analyzer = SchoolAnalyzer(config=config.analysis)
 visualizer = SchoolVisualizer(config.visualization)
 
 # Process data
-school_data = processor.process_dataset('data/high-school-directory.csv')
+school_data = processor.process_dataset('data/2_3_high-school-directory.csv')
 
 # Run analysis
 report = analyzer.generate_comprehensive_report(
@@ -137,11 +138,11 @@ report = analyzer.generate_comprehensive_report(
 
 # Generate visualizations
 charts = visualizer.export_all_charts(
-    report['detailed_analyses'],
+    school_data.processed_data,
     output_dir='outputs/charts'
 )
 
-print(f"Analysis complete: {len(charts)} chart types generated")
+print(f"Analysis complete: {len(charts)} chart files generated")
 ```
 
 ### Docker Usage
@@ -149,12 +150,12 @@ print(f"Analysis complete: {len(charts)} chart types generated")
 ```bash
 # Run analysis in Docker container
 docker run -v $(pwd)/data:/app/data -v $(pwd)/outputs:/app/outputs \
-  nyc-school-analyzer analyze /app/data/high-school-directory.csv \
+  nyc-school-analyzer analyze /app/data/2_3_high-school-directory.csv \
   --borough BROOKLYN --grade 9
 
 # Using docker-compose
 docker-compose run nyc-school-analyzer analyze \
-  /app/data/high-school-directory.csv --borough QUEENS --grade 10
+  /app/data/2_3_high-school-directory.csv --borough QUEENS --grade 10
 ```
 
 ## Configuration
@@ -175,8 +176,9 @@ Create `config/custom_config.yaml`:
 
 ```yaml
 data:
-  input_file: "my-school-data.csv"
+  input_file: "data/2_3_high-school-directory.csv"
   output_path: "custom_outputs/"
+  backup_path: "backups/"
 
 analysis:
   target_borough: "QUEENS"
@@ -188,15 +190,19 @@ visualization:
   dpi: 300
   export_formats: ["png", "pdf", "svg"]
 
+output:
+  export_formats: ["csv", "json"]
+  
 logging:
   level: "DEBUG"
   file_enabled: true
+  file_path: "logs/custom.log"
 ```
 
 Use custom configuration:
 
 ```bash
-nyc-schools --config config/custom_config.yaml analyze data/schools.csv
+nyc-schools --config config/custom_config.yaml analyze data/2_3_high-school-directory.csv
 ```
 
 ## Verification
@@ -207,11 +213,27 @@ nyc-schools --config config/custom_config.yaml analyze data/schools.csv
 # Run basic functionality test
 python -c "
 import nyc_school_analyzer
-print(f'NYC School Analyzer v{nyc_school_analyzer.__version__} installed successfully')
+print('NYC School Analyzer installed successfully')
 "
 
 # Run CLI help
 nyc-schools --help
+
+# Check configuration
+nyc-schools config
+```
+
+### Quick Test Analysis
+
+```bash
+# Validate your data file
+nyc-schools validate data/2_3_high-school-directory.csv
+
+# Run a quick analysis
+nyc-schools analyze data/2_3_high-school-directory.csv --borough BROOKLYN --grade 9
+
+# Generate visualizations from results
+nyc-schools viz outputs/data/processed_data_*.csv --output-dir test_charts --format png
 ```
 
 ### Run Test Suite
@@ -272,14 +294,14 @@ pip install -e .
 ```bash
 # Use chunked processing
 export NYC_SCHOOLS_CHUNK_SIZE=5000
-nyc-schools analyze large_dataset.csv
+nyc-schools analyze data/2_3_high-school-directory.csv
 ```
 
 **4. Matplotlib Backend Error**
 ```bash
 # Use non-interactive backend
 export MPLBACKEND=Agg
-nyc-schools visualize data.csv
+nyc-schools viz outputs/data/processed_data_*.csv
 ```
 
 **5. Docker Permission Issues**
@@ -292,7 +314,7 @@ sudo chown -R $USER:$USER outputs/
 
 - **Documentation**: Check `README.md` and `docs/` directory
 - **Configuration**: Run `nyc-schools config` to see current settings
-- **Validation**: Run `nyc-schools validate data.csv` to check data quality
+- **Validation**: Run `nyc-schools validate data/2_3_high-school-directory.csv` to check data quality
 - **Verbose Output**: Use `--verbose` flag for detailed logging
 - **Debug Mode**: Set `NYC_SCHOOLS_LOG_LEVEL=DEBUG`
 
@@ -304,8 +326,8 @@ export NYC_SCHOOLS_CHUNK_SIZE=10000
 export NYC_SCHOOLS_MEMORY_LIMIT_MB=2048
 export NYC_SCHOOLS_MAX_WORKERS=4
 
-# Disable validation for speed
-nyc-schools analyze data.csv --no-validate
+# Disable validation for speed (if validation command supports it)
+nyc-schools analyze data/2_3_high-school-directory.csv --borough BROOKLYN
 ```
 
 ## Next Steps
