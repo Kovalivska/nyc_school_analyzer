@@ -438,7 +438,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 **Svitlana Kovalivska, Ph.D.**
 - Data Scientist
-- GitHub: [@svitlanakovalivska](https://https://github.com/Kovalivska)
+- GitHub: [@svitlanakovalivska](https://github.com/Kovalivska)
 - Email: kovalivska@gmail.com
 
 **Project Foundation**: This project was developed as part of the Masterschool onboarding program, demonstrating comprehensive data analysis skills through a structured 4-day learning curriculum.
