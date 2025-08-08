@@ -57,7 +57,7 @@ This production tool is built upon comprehensive analysis work completed across 
 
 ```bash
 # Install from source
-git clone https://github.com/nyc-schools/nyc-school-analyzer.git
+git clone https://github.com/Kovalivska/nyc_school_analyzer.git
 cd nyc-school-analyzer
 pip install -e .
 
@@ -69,16 +69,16 @@ pip install nyc-school-analyzer
 
 ```bash
 # Run complete analysis
-nyc-schools analyze high-school-directory.csv --borough BROOKLYN --grade 9
+nyc-schools analyze data/2_3_high-school-directory.csv --borough BROOKLYN --grade 9
 
-# Generate visualizations only  
-nyc-schools visualize processed_data.csv --format png pdf
+# Generate visualizations from processed data
+nyc-schools viz outputs/data/processed_data_*.csv --format png pdf
 
 # Validate data quality
-nyc-schools validate high-school-directory.csv --strict
+nyc-schools validate data/2_3_high-school-directory.csv
 
 # Export processed data
-nyc-schools export processed_data.csv --formats csv json excel
+nyc-schools export outputs/data/processed_data_*.csv --formats csv json
 ```
 
 ### Python API
@@ -92,7 +92,7 @@ analyzer = SchoolAnalyzer()
 visualizer = SchoolVisualizer()
 
 # Process data
-school_data = processor.process_dataset("high-school-directory.csv")
+school_data = processor.process_dataset("data/2_3_high-school-directory.csv")
 
 # Run analysis
 report = analyzer.generate_comprehensive_report(
@@ -208,7 +208,7 @@ nyc_school_analyzer/
 ```yaml
 # config/config.yaml
 data:
-  input_file: "high-school-directory.csv"
+  input_file: "2_3_high-school-directory.csv"
   input_path: "data/"
   output_path: "outputs/"
 
@@ -267,7 +267,7 @@ docker build -t nyc-school-analyzer .
 
 # Run analysis
 docker run -v $(pwd)/data:/app/data -v $(pwd)/outputs:/app/outputs \
-  nyc-school-analyzer analyze /app/data/high-school-directory.csv
+  nyc-school-analyzer analyze /app/data/2_3_high-school-directory.csv
 ```
 
 ### Production Environment
@@ -280,7 +280,7 @@ export NYC_SCHOOLS_LOG_LEVEL="WARNING"
 export NYC_SCHOOLS_MONITORING_ENABLED="true"
 
 # Run with production configuration
-nyc-schools analyze data.csv --config production.yaml
+nyc-schools analyze data/2_3_high-school-directory.csv --config production.yaml
 ```
 
 ## Performance
@@ -302,7 +302,7 @@ nyc-schools analyze data.csv --config production.yaml
 ### Development Setup
 ```bash
 # Clone repository
-git clone https://github.com/nyc-schools/nyc-school-analyzer.git
+git clone https://github.com/Kovalivska/nyc_school_analyzer.git
 cd nyc-school-analyzer
 
 # Create virtual environment
@@ -384,7 +384,7 @@ for file in data/*.csv; do
 done
 
 # Automated reporting
-nyc-schools analyze data.csv --format json | \
+nyc-schools analyze data/2_3_high-school-directory.csv --format json | \
   jq '.executive_summary' > summary.json
 ```
 
@@ -396,14 +396,14 @@ nyc-schools analyze data.csv --format json | \
 ```bash
 # Use chunked processing
 export NYC_SCHOOLS_CHUNK_SIZE=5000
-nyc-schools analyze large_dataset.csv
+nyc-schools analyze data/2_3_high-school-directory.csv
 ```
 
 **Visualization Rendering Issues**
 ```bash
 # Use non-interactive backend
 export MPLBACKEND=Agg
-nyc-schools visualize data.csv
+nyc-schools viz outputs/data/processed_data_*.csv
 ```
 
 **Configuration Validation Errors**
@@ -411,17 +411,17 @@ nyc-schools visualize data.csv
 # Check configuration
 nyc-schools config
 
-# Validate specific config file
-nyc-schools validate-config config.yaml
+# Validate specific config file (if available)
+nyc-schools validate data/2_3_high-school-directory.csv
 ```
 
 ## Support
 
 ### Getting Help
-- **Documentation**: [https://nyc-school-analyzer.readthedocs.io](https://nyc-school-analyzer.readthedocs.io)
-- **Issue Tracker**: [GitHub Issues](https://github.com/nyc-schools/nyc-school-analyzer/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/nyc-schools/nyc-school-analyzer/discussions)
-- **Email**: analytics@nycschools.edu
+- **Documentation**: [https://github.com/Kovalivska/nyc_school_analyzer](https://github.com/Kovalivska/nyc_school_analyzer)
+- **Issue Tracker**: [GitHub Issues](https://github.com/Kovalivska/nyc_school_analyzer/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/Kovalivska/nyc_school_analyzer/discussions)
+- **Email**: kovalivska@gmail.com
 
 ### Reporting Bugs
 Please include:
@@ -437,8 +437,8 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 ## Author
 
 **Svitlana Kovalivska, Ph.D.**
-- Data Scientist
-- GitHub: [@svitlanakovalivska](https://github.com/Kovalivska)
+- Data Scientist  
+- GitHub: [@Kovalivska](https://github.com/Kovalivska)
 - Email: kovalivska@gmail.com
 
 **Project Foundation**: This project was developed as part of the Masterschool onboarding program, demonstrating comprehensive data analysis skills through a structured 4-day learning curriculum.
